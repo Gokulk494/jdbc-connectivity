@@ -1,0 +1,86 @@
+import java.awt.event.*;
+import java.awt.*;
+
+import javax.naming.spi.DirStateFactory.Result;
+import javax.swing.*;
+
+class SWINGJDBC extends JFrame implements ItemListener, ActionListener {
+    JFrame f;
+    JLabel l1, l2;
+    JComboBox<String> c1, c3;
+    static JComboBox<String> c2;
+    Result rs;
+    JButton b1, b2, b3;
+    String UID;
+    JPasswordField value;
+    String url = "jdbc:mysql://localhost:3306";
+    
+    SWINGJDBC() {
+        f = new JFrame("Select User from MYSQL");
+        l1 = new JLabel("Select your User ID");
+        l2 = new JLabel("");
+        b1 = new JButton("Connect");
+        b2 = new JButton("Load");
+        b3 = new JButton("Load");
+        c1 = new JComboBox<String>();
+        c2 = new JComboBox<String>();
+        c3 = new JComboBox<String>();
+        value = new JPasswordField();
+
+        c1.addItemListener(this);
+        c2.addItemListener(this);
+        c3.addItemListener(this);
+        b1.addActionListener(this);
+
+        l1.setBounds(340, 100, 145, 50);
+        value.setBounds(160, 180, 145, 40);
+        c1.setBounds(160, 100, 145, 50);
+        b1.setBounds(350, 180, 125, 50);
+        b2.setBounds(350, 250, 125, 50);
+        b3.setBounds(350, 330, 125, 50);
+        c2.setBounds(160, 250, 145, 50);
+        c3.setBounds(160, 330, 145, 50);
+
+        f.add(l1);
+        f.add(l2);
+        f.add(c1);
+        f.add(c2);
+        f.add(b1);
+        f.add(b2);
+        f.add(b3);
+        f.add(c3);
+        f.add(value);
+        f.setSize(800, 800);
+        f.setLayout(null);
+        f.setVisible(true);
+
+        c1.addItem("Select users");
+        c2.addItem("Select DataBase");
+        c3.addItem("Select Table");
+    }
+
+    public static void main(String[] args) {
+        new SWINGJDBC();
+    }
+
+    public void actionPerformed(ActionEvent e) {
+        selectdatabase s1 = new selectdatabase();
+        UID = (String) c1.getSelectedItem();
+        String password = new String(value.getPassword());
+
+        if (e.getSource() == b1) {
+            try {
+                s1.executeMySQLQuery(UID, password);
+            } catch (Exception e1) {
+                e1.printStackTrace();
+            }
+        }
+    }
+
+    public void itemStateChanged(ItemEvent e) {
+        if (e.getSource() == c1) {
+            UID = (String) c1.getSelectedItem();
+            l1.setText(UID);
+        }
+    }
+}
